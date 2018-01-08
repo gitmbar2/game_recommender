@@ -1,2 +1,5 @@
 config.py
+notebooks/metastore_db
+
 *.pyc
+*.ipynb_checkpoints
