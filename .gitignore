@@ -1,8 +1,8 @@
 config.py
 derby.log
 
-notebooks/metastore_db
-notebooks/.ipynb_checkpoints
+notebooks/metastore_db/
+notebooks/.ipynb_checkpoints/
 
 *.pyc
 *.ipynb_checkpoints
