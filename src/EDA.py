@@ -43,3 +43,15 @@ def add_summaries(df, max_rank=3):
     joined = df.join(grouped_means, on='game_name')
     joined['min_max'] = joined.apply(lambda x: min_max(x) * max_rank, axis=1)
     return joined
+
+def get_uids(df, from_column='game_name', to_column='game_uid'):
+    # fitting ALS must have numbers for itemCol and userCol
+    uid = 0
+    uid_map = {}
+    for item in df[from_column]:
+        if item in uid_map:
+            continue
+        uid_map[item] = uid
+        uid += 1
+    df[to_column] = df[from_column].map(lambda name: uid_map[name])
+    return df
