@@ -14,3 +14,16 @@ Graph improvements with more data.
 Recommend something to deal with cold start.
 
 Compare to recommending most popular games
+
+# FROM NOTEBOOK
+
+cumulative survivorship score?  
+removing users with 5+ games but no games outside of bucket 1 (affects item clustering)
+    - going further, remove all users who rate everything the same
+maybe remove gamers with 100+ games (also affects item clustering)  
+normalize to users instead of games (does ALS model adjust for user bias?)  
+Split train/val/test based on time - test on most recent.  What about preference shift?  
+Must do - compare to random recommendations.  Just do randint for test set.  
+Must do - Site papers.  
+
+find examples of each item rank to get a sense of latent features
