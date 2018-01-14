@@ -31,12 +31,9 @@ export PATH=$HOME/anaconda/bin:$PATH
 echo -e "\n\n# Anaconda" >> $HOME/.bashrc
 echo "export PATH=$HOME/anaconda/bin:$PATH" >> $HOME/.bashrc
 
-# Download NLTK libraries
-$HOME/anaconda/bin/python -c "import nltk; \
-nltk.download('stopwords', '/usr/share/nltk_data'); \
-nltk.download('punkt', '/usr/share/nltk_data'); \
-nltk.download('averaged_perceptron_tagger', '/usr/share/nltk_data'); \
-nltk.download('maxent_treebank_pos_tagger', '/usr/share/nltk_data')"
+# Custom python scripts look like this
+# $HOME/anaconda/bin/python -c "import nltk; \
+# nltk.download('stopwords', '/usr/share/nltk_data');"
 
 # Record ending time
 touch $HOME/.bootstrap-end

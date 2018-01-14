@@ -23,7 +23,9 @@ removing users with 5+ games but no games outside of bucket 1 (affects item clus
 maybe remove gamers with 100+ games (also affects item clustering)  
 normalize to users instead of games (does ALS model adjust for user bias?)  
 Split train/val/test based on time - test on most recent.  What about preference shift?  
-Must do - compare to random recommendations.  Just do randint for test set.  
 Must do - Site papers.  
+
+Add data from 3 4 (6, 7) game users for training only.
+Use 4, 5, 6, 7 cutoffs and graph
 
 find examples of each item rank to get a sense of latent features

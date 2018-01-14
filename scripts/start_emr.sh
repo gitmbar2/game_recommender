@@ -16,7 +16,7 @@
 
 aws emr create-cluster \
     --name PySparkCluster \
-    --release-label emr-5.8.0 \
+    --ami-version 3.11.0 \
     --applications Name=Spark \
     --ec2-attributes KeyName=$2 \
     --use-default-roles \

@@ -2,6 +2,7 @@ config.py
 derby.log
 nohup.out
 
+data/fileparts
 data/steam.sql.gz
 data/steam_big.sql.gz
 data/steam_segment*
@@ -9,6 +10,7 @@ data/s3*
 notebooks/metastore_db/
 notebooks/.ipynb_checkpoints/
 
+*.java
 *.pyc
 *.ipynb_checkpoints
 *.dat

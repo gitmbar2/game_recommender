@@ -75,3 +75,11 @@ def spark_ndcg_at_k(
         .reduce(lambda total, gain: total + gain)
     average_ndcg = ndcg / prediction_count
     return (ndcg, average_ndcg)
+
+# Verify RMSE with rdd math
+def spark_rmse(predictions):
+    prediction_count = predictions.count()
+    predictions_rdd = predictions.rdd
+    SSE = predictions_rdd.map(lambda r: (r['min_max'] - r['prediction'])**2) \
+        .reduce(lambda total, x: total + x)
+    math.sqrt(SSE / prediction_count)

@@ -14,4 +14,14 @@ ssh -NfL 48888:localhost:48888 spark
 
 
 ## Launch Cluster with n Nodes
-bash scripts/start_emr.sh '{s3 bucket name}' '{key name on aws}' 6
+bash scripts/start_emr.sh '{s3 bucket}' '{key name on aws}' 6
+
+# Other
+Change jupyspark 'export SPARK_HOME=/usr/lib/spark'
+conda create --name py36 python=3.6
+maybe remove some python path stuff from jupyspark-emr and hope it loads
+
+## Hadoop stuff (unconfirmed)
+$HADOOP_HOME/bin/hadoop fs -mkdir /user/input
+$HADOOP_HOME/bin/hadoop fs -put /home/file.txt /user/input
+$HADOOP_HOME/bin/hadoop fs -ls /user/input
