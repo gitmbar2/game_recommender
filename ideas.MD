@@ -24,6 +24,9 @@ maybe remove gamers with 100+ games (also affects item clustering)
 normalize to users instead of games (does ALS model adjust for user bias?)  
 Split train/val/test based on time - test on most recent.  What about preference shift?  
 Must do - Site papers.  
+Must do - why normalize?
+
+Wishlist - lower weight on older data by last-played (still playing not done rating)
 
 Add data from 3 4 (6, 7) game users for training only.
 Use 4, 5, 6, 7 cutoffs and graph

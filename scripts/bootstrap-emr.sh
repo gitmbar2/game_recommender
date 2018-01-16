@@ -13,10 +13,10 @@ sudo chown hadoop:hadoop /mnt1/anaconda
 ln -s /mnt1/anaconda $HOME/anaconda
 
 # Create the nltk_data directory on a volume with more space
-sudo mkdir /mnt1/nltk_data
-sudo chown hadoop:hadoop /mnt1/nltk_data
-sudo ln -s /mnt1/nltk_data /usr/share/nltk_data
-sudo chown hadoop:hadoop /usr/share/nltk_data
+# sudo mkdir /mnt1/nltk_data
+# sudo chown hadoop:hadoop /mnt1/nltk_data
+# sudo ln -s /mnt1/nltk_data /usr/share/nltk_data
+# sudo chown hadoop:hadoop /usr/share/nltk_data
 
 # Download Anaconda2
 wget -S -T 10 -t 5 https://repo.continuum.io/archive/Anaconda2-5.0.0-Linux-x86_64.sh -O $HOME/anaconda/anaconda.sh

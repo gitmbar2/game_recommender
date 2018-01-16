@@ -1,6 +1,7 @@
 config.py
 derby.log
 nohup.out
+ideas.*
 
 data/fileparts
 data/steam.sql.gz

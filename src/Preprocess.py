@@ -2,9 +2,10 @@ import numpy as np
 import pandas as pd
 import random
 
-class SubsetALSPreprocessor(object):
+class PandasALSPreprocessor(object):
     def __init__(self, df):
         self.df = df.copy()
+        self.standard_columns = ['uid', 'game_uid', 'game_name', 'playtime', 'playtime_min_max']
 
     def _rank_playtime(self, time):
         if time <= 1:
@@ -61,4 +62,8 @@ class SubsetALSPreprocessor(object):
         existing_columns = set(self.df.columns)
         intersection = existing_columns.intersection(set(keep_columns))
         self.df = self.df[list(intersection)]
+        return self.df
+
+    def keep_standard_columns(self):
+        self.keep_columns(self.standard_columns)
         return self.df
