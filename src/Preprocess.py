@@ -28,7 +28,7 @@ class PandasALSPreprocessor(object):
         grouped_means = df.groupby('game_name').agg({'playtime': aggs})
         grouped_means.columns = [col[1] for col in grouped_means.columns]
         joined = df.join(grouped_means, on='game_name')
-        joined['playtime_min_max'] = joined.apply(lambda x: self._min_max(x) * max_rank, axis=1)
+        joined['playtime_min_max'] = joined.apply(lambda x: (self._min_max(x) * max_rank), axis=1)
         return joined
 
     def _create_uids(self, df, from_column='game_name', to_column='game_uid'):

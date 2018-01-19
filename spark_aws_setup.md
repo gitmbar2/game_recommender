@@ -22,9 +22,9 @@ ssh -NfL 48888:localhost:48888 spark
 bash scripts/start_emr.sh '{s3 bucket}' '{key name on aws}' 6
 
 # Hadoop Commands
-$HADOOP_HOME/bin/hadoop fs -mkdir /steam
-$HADOOP_HOME/bin/hadoop fs -put /home/file.txt /steam
-$HADOOP_HOME/bin/hadoop fs -ls /steam
+hadoop fs -mkdir /steam
+hadoop fs -put /home/file.txt /steam
+hadoop fs -ls /steam
 
 # Get data from S3
 df -hk (free disk space)
@@ -37,6 +37,7 @@ hdfs dfsadmin -report (free space on hdfs)
 
 gunzip -c compressed.tar.gz | hadoop fs -put - /user/files/uncompressed_data
 
+hadoop fs -mkdir /steam
 gunzip -c steam_big.sql.gz | hadoop fs -put - /steam/steam_big.sql
 
 # Get Data From hdfs
@@ -49,6 +50,7 @@ hadoop fs -getmerge /output/dir/on/hdfs/ /desired/local/output/file.txt
 
 # OTHER
 ## Can spark read from sql file?
+https://spark.apache.org/docs/1.6.1/sql-programming-guide.html#run-sql-on-files-directly
 
 ## POTENTIALLY useful
 sqlContext.read.

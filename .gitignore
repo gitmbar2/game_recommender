@@ -3,6 +3,8 @@ derby.log
 nohup.out
 ideas.*
 
+src/unused.py
+
 data/fileparts
 data/steam.sql.gz
 data/steam_big.sql.gz

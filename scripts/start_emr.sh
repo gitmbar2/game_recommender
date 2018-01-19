@@ -12,7 +12,7 @@
 # Requires the awscli to be set up, need to have correct default region configured
 # Run `aws configure` to set this up
 
-# aws s3 cp bootstrap-emr.sh s3://$1/scripts/bootstrap-emr.sh
+# backup. --ami-version has very different setup / file structure
 
 aws emr create-cluster \
     --name PySparkCluster \

@@ -17,8 +17,21 @@ ${SPARK_HOME}/bin/pyspark \
 	--packages com.databricks:spark-csv_2.11:1.5.0 \
 	--packages com.amazonaws:aws-java-sdk-pom:1.10.34 \
 	--packages org.apache.hadoop:hadoop-aws:2.7.3 \
-  1000
 
+# Testing SQL
+pyspark \
+  --master yarn \
+        --deploy-mode client \
+	--executor-memory 10G \
+        --executor-cores 4 \
+	--driver-memory 10G \
+        --driver-cores 4 \
+  --num-executors 50 \
+	--packages com.databricks:spark-csv_2.11:1.5.0 \
+	--packages com.amazonaws:aws-java-sdk-pom:1.10.34 \
+	--packages org.apache.hadoop:hadoop-aws:2.7.3 \
+  --files ../data/sample_sql.sql \
+  spark_sql.py
 
 ##
 /usr/bin/spark-submit \
@@ -27,8 +40,8 @@ ${SPARK_HOME}/bin/pyspark \
   --queue default \
   --num-executors 20 --executor-memory 1G --executor-cores 2 \
   --driver-memory 1G \
-  --files {files}
-  sleepy.py
+  --files ../data/sample_sql.sql
+  spark_sql.py
 
 /usr/bin/spark-submit \
   --master yarn
