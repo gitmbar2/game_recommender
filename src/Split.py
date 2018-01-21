@@ -11,7 +11,7 @@ class PandasTrainTest(object):
         if (seed):
             random.seed(seed)
 
-    def _user_games_split(self, test_df, game_split_train=.5):
+    def user_games_split(self, test_df, game_split_train=.5):
         train_indices = []
         test_indices = []
         # can do uid in users and game in gameid
@@ -55,7 +55,7 @@ class PandasTrainTest(object):
         '''
         train_df, test_df = self.user_only_split(user_column, user_split_train)
         # append test user training games to train users
-        train_games_df, test_games_df = self._user_games_split(test_df, game_split_train=game_split_train)
+        train_games_df, test_games_df = self.user_games_split(test_df, game_split_train=game_split_train)
         final_train_df = train_df.append(train_games_df)
         return (final_train_df, test_games_df)
 
@@ -76,7 +76,7 @@ class PandasTrainTest(object):
             k_train_ids = [item for sublist in k_train for item in sublist]
             k_test_df = self.df[self.df[user_column].isin(k_test_ids)]
             k_train_df = self.df[self.df[user_column].isin(k_train_ids)]
-            k_train_games_df, k_test_games_df = self._user_games_split(k_test_df, game_split_train=game_split_train)
+            k_train_games_df, k_test_games_df = self.user_games_split(k_test_df, game_split_train=game_split_train)
             final_k_train_df = k_train_df.append(k_train_games_df)
             finals.append((final_k_train_df, k_test_games_df))
         return finals

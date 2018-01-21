@@ -77,9 +77,9 @@ def spark_ndcg_at_k(
     return (ndcg, average_ndcg)
 
 # Verify RMSE with rdd math
-def spark_rmse(predictions):
+def spark_rmse(predictions, label_column='playtime_min_max'):
     prediction_count = predictions.count()
     predictions_rdd = predictions.rdd
-    SSE = predictions_rdd.map(lambda r: (r['min_max'] - r['prediction'])**2) \
+    SSE = predictions_rdd.map(lambda r: (r[label_column] - r['prediction'])**2) \
         .reduce(lambda total, x: total + x)
     math.sqrt(SSE / prediction_count)
