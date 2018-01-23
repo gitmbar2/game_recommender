@@ -9,6 +9,9 @@ def sleep_mapper(seconds):
 
 
 if __name__ == "__main__":
+    conf = SparkConf().setAppName("Test_App")
+    sc = SparkContext(conf=conf)
+
     logging.getLogger("py4j").setLevel(logging.ERROR)
 
     subprocess.call(
@@ -18,8 +21,6 @@ if __name__ == "__main__":
     with open("go_to_sleep.in", 'r') as f_in:
         data = json.load(f_in)
 
-    conf = SparkConf().setAppName("sleep_mapper")
-    sc = SparkContext(conf=conf)
     sc.\
         parallelize(
             [data.get("duration") for number in xrange(10000)]

@@ -46,15 +46,3 @@ bin/hadoop fs -copyToLocal /hdfs/source/path /localfs/destination/path
 
 ## Get merge
 hadoop fs -getmerge /output/dir/on/hdfs/ /desired/local/output/file.txt
-
-
-# OTHER
-## Can spark read from sql file?
-https://spark.apache.org/docs/1.6.1/sql-programming-guide.html#run-sql-on-files-directly
-
-## POTENTIALLY useful
-sqlContext.read.
-  format("com.databricks.spark.csv").
-  option("delimiter","\t").
-  option("header","true").
-  load("hdfs:///demo/data/tsvtest.tsv").show
