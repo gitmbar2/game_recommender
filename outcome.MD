@@ -1,5 +1,6 @@
 ## Playtime Distribution (playtime_distribution.ipynb)
-[Check the jupyter notebook for EDA](notebooks/playtime_distribution.ipynb)
+[Check the jupyter notebook for EDA](notebooks/playtime_distribution.ipynb)  
+
 We can see that the number of Users who have played n or more Games drops off very quickly.  
 ![alt text](figures/user_dropoff.png "User Dropoff")
 

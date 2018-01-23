@@ -10,17 +10,22 @@ def load_200k():
     steam_200k_df = steam_200k_df.drop('purchase_action', axis=1)
     return steam_200k_df
 
-def load_without_cold_start(min_games_played=5, min_users_for_game=0):
+def load_200k_restrict_data(min_games_played=5, min_users_for_game=0):
     steam_df = load_200k()
-    # filter users
-    return restrict_user_item(steam_df, min_games_played=min_games_played, min_users_for_game=min_users_for_game)
+    # filter users and games
+    return get_filtered_user_item(steam_df, min_games_played=min_games_played, min_users_for_game=min_users_for_game)
 
-def restrict_user_item(steam_df, min_games_played=5, min_users_for_game=0):
-    # filter users
-    games_played = steam_df.groupby('uid').count()
-    usable_users = games_played[games_played['game_name'] >= min_games_played].reset_index()
-    filtered_users = steam_df[steam_df['uid'].isin(usable_users['uid'].values)]
+def get_users_with_min_games(df, min_games_played=5):
+    games_counts_df = df.groupby('uid').count()
+    usable_users = games_counts_df[games_counts_df['game_name'] >= min_games_played].reset_index()
+    return df[df['uid'].isin(usable_users['uid'].values)]
+
+def get_games_with_min_users(df, min_users_for_game=0):
+    user_counts_df = df.groupby('game_name').count()
+    usable_games = user_counts_df[user_counts_df['playtime'] > min_users_for_game].reset_index()
+    return df[df['game_name'].isin(usable_games['game_name'].values)]
+
+def get_filtered_user_item(steam_df, min_games_played=5, min_users_for_game=0):
+    filtered_users_df = get_users_with_min_games(steam_df, min_games_played=min_games_played)
     # filter games
-    user_counts = steam_df.groupby('game_name').count()
-    usable_games = user_counts[user_counts['playtime'] > min_users_for_game].reset_index()
-    return filtered_users[steam_df['game_name'].isin(usable_games['game_name'].values)]
+    return get_games_with_min_users(filtered_users_df, min_users_for_game=min_users_for_game)
