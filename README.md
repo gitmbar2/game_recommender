@@ -11,6 +11,8 @@ Which games are most worth the money?
 
 There are many potential stakeholders who will get value from building such models.  Obviously this will benefit people who want to buy games that they will play a long time (we assume they probably enjoy such games).  Therefore, building a platform that recommends games very well has a lot of value.  The stakeholder who stands to gain the most would likely be Steam.  
 
+For the outcome of the model, [click here](./outcome.MD)
+
 # Why Recommend?
 Research has shown that when users have too many choices they are less likely to
 make a purchase.  
@@ -34,6 +36,8 @@ our offline metrics and improvements in metrics testing online.
 
 
 # Path To Success
+The goal is to recommend the top 5 games to the user based on the games they have played and how long they played them compared to other users.  
+
 We will start by predicting play times for the steam-200k dataset, removing a percent of real playtime data and measuring how well we can backfill it with predictions.
 If there is time, we will fetch data from more users and games to improve the model.
 Once we can recommend games well, we can start to look into whether attributes of the games or users are useful in making recommendations.  
