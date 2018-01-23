@@ -1,4 +1,5 @@
 ## Playtime Distribution (playtime_distribution.ipynb)
+[Check the jupyter notebook for EDA](notebooks/playtime_distribution.ipynb)
 We can see that the number of Users who have played n or more Games drops off very quickly.  
 ![alt text](figures/user_dropoff.png "User Dropoff")
 
@@ -22,7 +23,7 @@ NDCG by itself will be potentially misleading, however.  In the case of only kee
 So the final evaluation metric that we will use is NDCG for our model predictions compared to the NDCG of a random prediction.  We will see how much our model outperforms random predictions as a percentage increase.  
 
 For example, the NDCG % Increase for a model only training on Users with n+ games played:  
-![alt text](figures/increase_games_played "NDCG Increase For Increasing Minimum Games Played")
+![alt text](figures/increase_games_played.png "NDCG Increase For Increasing Minimum Games Played")
 
 ## Optimal Users and Games to include in the model
 There is a tradeoff when restricting the model to only include Users with a certain number of Games played.  Our metrics will improve, but our model will be usable for a lower and lower percentage of our user base.
@@ -34,3 +35,6 @@ Recommending 5 Games:
 Final Model NDCG Increase Over Random: 30.15%  
 Final Model Validation NDCG Increase Over Random: 34.19%  
 Random RMSE Increase Vs Model: 222.55%  
+
+
+For some potential next steps, [click here](./next_steps.md)

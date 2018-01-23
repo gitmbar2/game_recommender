@@ -1,3 +1,5 @@
+For the final results of the model, [click here](./outcome.md)
+
 # Recommending Steam Games
 There are many... many games on the Steam platform that a user could purchase or download for free - from small, indie developers to the 15th game in a massive, popular series.  
 
@@ -10,8 +12,6 @@ If you buy a game, how long will you play it?
 Which games are most worth the money?  
 
 There are many potential stakeholders who will get value from building such models.  Obviously this will benefit people who want to buy games that they will play a long time (we assume they probably enjoy such games).  Therefore, building a platform that recommends games very well has a lot of value.  The stakeholder who stands to gain the most would likely be Steam.  
-
-For the outcome of the model, [click here](./outcome.MD)
 
 # Why Recommend?
 Research has shown that when users have too many choices they are less likely to
