@@ -3,6 +3,12 @@ import pandas as pd
 import random
 
 class PandasALSPreprocessor(object):
+    '''
+        For use with data loaded into pandas with specific columns.
+        All standard preprocessing before splitting data into training and test sets
+        and putting into ALS is done in this class.
+        Requires the columns uid, playtime, game_name.
+    '''
     def __init__(self, df):
         self.df = df.copy()
         self.standard_columns = ['uid', 'game_uid', 'game_name', 'playtime', 'playtime_min_max']
@@ -16,23 +22,30 @@ class PandasALSPreprocessor(object):
             return 2
         return 3
 
-    def _min_max(self, row):
-        # TODO double check this
+    def _calculate_min_max(self, row):
+        # avoid dividing by 0
         if (row['playtime_max'] == row['playtime_min']):
             return 1.0 / row['game_counts']
         diff = row['playtime_max'] - row['playtime_min']
         return (row['playtime'] - row['playtime_min']) / diff
 
     def _add_playtime_summaries(self, df, max_rank=3):
+        '''
+            Adds aggregations stats as well as the playtime_min_max fields to a
+            pandas DataFrame.
+        '''
         aggs = {'playtime_mean': np.mean, 'playtime_min': np.min, 'playtime_max': np.max, 'game_counts': 'count'}
         grouped_means = df.groupby('game_name').agg({'playtime': aggs})
         grouped_means.columns = [col[1] for col in grouped_means.columns]
         joined = df.join(grouped_means, on='game_name')
-        joined['playtime_min_max'] = joined.apply(lambda x: (self._min_max(x) * max_rank), axis=1)
+        joined['playtime_min_max'] = joined.apply(lambda x: (self._calculate_min_max(x) * max_rank), axis=1)
         return joined
 
     def _create_uids(self, df, from_column='game_name', to_column='game_uid'):
-        # fitting ALS must have numbers for itemCol and userCol
+        '''
+            If the ALS algorithm requires ids for items instead of names,
+            this will ensure that each item has a unique id.
+        '''
         uid = 0
         uid_map = {}
         for item in df[from_column]:
@@ -46,15 +59,15 @@ class PandasALSPreprocessor(object):
     def get_df(self):
         return self.df
 
-    def process_general(self):
+    def add_item_ids(self):
         self.df = self._create_uids(self.df, from_column='game_name', to_column='game_uid')
         return self.df
 
-    def process_buckets(self):
+    def add_rank_buckets(self):
         self.df["playtime_rank"] = self.df['playtime'].map(lambda value: self._rank_playtime(value))
         return self.df
 
-    def process_min_max(self, max_rank=3):
+    def add_min_max(self, max_rank=3):
         self.df = self._add_playtime_summaries(self.df, max_rank=max_rank)
         return self.df
 

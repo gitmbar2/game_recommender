@@ -61,7 +61,6 @@ class PandasTrainTest(object):
 
     def get_k_folds(self, k, user_column='uid', game_split_train=.5):
         unique_users = self._get_unique_users(self.df)
-        print('Number of users: ', len(unique_users))
         len_over_k = int((len(unique_users) + 1) / k)
         user_divisions = []
         for i in range(0, k):
