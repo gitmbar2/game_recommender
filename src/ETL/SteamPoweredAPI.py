@@ -8,74 +8,74 @@ from bson import json_util
 path_of_exile_id = 238960
 
 class SteamPoweredAPI(object):
+    '''
+    Wrapper around Steam APIs.
+    See https://developer.valvesoftware.com/wiki/Steam_Web_API.
+    Also has some reformatting methods to standardize results.
+    '''
     def __init__(self):
         self.key = config.get_key()
         self.test_user = config.get_test_user_id()
         self.base_api_url = "http://api.steampowered.com/"
         self.base_store_api_url = "http://store.steampowered.com/"
 
-    def testing(self):
-        gameid = '238960'
-        base_url = self.base_api_url
-        # path = "ISteamApps/GetAppList/v0002/?format=json"
-        # path = "ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=%s&format=json" % gameid
-        path = "IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&format=json".format(self.key, self.test_user)
-        url = base_url + path
-
-        print('getting url: ', url)
-        response = requests.get(url).content
-        return response
-
-    def get_games_for_users(self, user_ids):
+    # write to disk
+    def write_games_for_users_to_json(self, user_ids, filepath):
         '''
             Args:
                 user_id: list of int or stringified ints
             Returns:
                 JSON
                 {response: {
-                    game_count: int
                     games: array
                 }}
         '''
         formatted_user_ids = [str(user_id) for user_id in user_ids]
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        write_to = os.path.join(current_dir, 'data/test_line_delimited.json')
+        write_to = os.path.join(current_dir, filepath)
         for formatted_user_id in formatted_user_ids:
             response = self.get_games_for_user(formatted_user_id)
             if response:
                 with open(write_to, 'ab') as f:
                     for game in response:
                         f.write(json_util.dumps(game)+'\n')
-        # return responses
 
+    # The hours on steam is only logged if you are playing while connected to the steam network.
+    # If you are playing while steam is offline or steam somehow loses connection, no hours will be logged.
     def get_games_for_user(self, user_id):
         '''
+            Rather than returning empty JSON for no games, returns None
             Args:
                 user_id: stringified number (valid steam id seems to be len 17)
             Returns:
                 JSON
                 {response: {
-                    game_count: int
                     games: array
                 }}
+                or None
         '''
         if type(user_id) is not str:
             raise TypeError('user id should be in string format')
-        path = "IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&format=json".format(self.key, user_id)
+        path = "IPlayerService/GetOwnedGames/v1/?key={0}&steamid={1}&format=json".format(self.key, user_id)
         url = self.base_api_url + path
         print('getting url: {}'.format(url))
 
-        response = requests.get(url).json()
-        print(response)
-        return self.format_games_response(response, user_id)
+        try:
+            response = requests.get(url, timeout=60)
+        except Exception as e:
+            return None
+
+        print('response code:', response.status_code)
+        if response.status_code is not 200:
+            return None
+
+        return self.format_games_response(response.json(), user_id)
 
     def format_games_response(self, response_string, user_id):
         # We want to have either csv or json delimited by line
         # including data: user_id, game_id, playtime
-        # will keep game_count as a validation field
         output = []
         data = response_string['response']
-        print(data)
         if not 'games' in data:
             return None
         for game in data['games']:
@@ -83,7 +83,6 @@ class SteamPoweredAPI(object):
                 'user_id': user_id,
                 'game_id': game['appid'],
                 'playtime_forever': game['playtime_forever'],
-                'game_count': data['game_count']
             }
             output.append(output_item)
         return output
@@ -122,22 +121,11 @@ class SteamPoweredAPI(object):
         info = requests.get(url).content
         return info
 
-
-''' Testing '''
 if __name__ == "__main__":
     api = SteamPoweredAPI()
     test_user = config.get_test_user_id()
-    # apps = [270880]
 
-    # info = api.testing()
-    # print(info)
-    # 17 length int
+    # '76561197984981409' is some random known positive id
     users = [test_user, '76561197984981409']
     info = api.get_games_for_users(users)
     print(info)
-    #
-    # current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    # write_to = os.path.join(current_dir, 'data/all_games.json')
-    # print(write_to)
-    # with open(write_to, 'w') as outfile:
-    #     json.dump("".join(str(info).split()), outfile)
