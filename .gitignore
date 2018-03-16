@@ -2,13 +2,13 @@ config.py
 derby.log
 nohup.out
 
-src/unused.py
-
 data/*
-!data/steam-200k.csv
 !data/data_overview.md
+!data/steam-200k.csv
 !data/example_game.json
+!data/all_steam_apps.json
 
+notebooks/optimization_testing*
 notebooks/testing*
 notebooks/.ipynb_checkpoints/
 

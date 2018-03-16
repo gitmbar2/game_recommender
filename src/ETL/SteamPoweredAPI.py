@@ -4,7 +4,6 @@ import config
 import os
 from bson import json_util
 
-# test_app = 340
 path_of_exile_id = 238960
 
 class SteamPoweredAPI(object):
@@ -106,7 +105,6 @@ class SteamPoweredAPI(object):
         # '&filters=price_overview' can filter for a specific field
         formatted_app_ids = [str(app_id) for app_id in app_ids]
         path = "api/appdetails?appids={0}".format(','.join(formatted_app_ids))
-        # path = "appdetails?appids={0}&cc=en_US".format(formatted_app_ids)
         url = self.base_store_api_url + path
 
         print('getting url: ', url)
