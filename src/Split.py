@@ -67,27 +67,36 @@ class PandasTrainTest(object):
         final_train_df = train_df.append(train_games_df)
         return (final_train_df, test_games_df)
 
+    def _kth_train_test(self, user_divisions, k, user_column, game_split_train):
+        k_test_ids = user_divisions[k]
+        k_train = user_divisions[0:k] + user_divisions[k+1:]
+        # flatten 2d -> 1d
+        k_train_ids = [item for sublist in k_train for item in sublist]
+        k_train_df = self.df[self.df[user_column].isin(k_train_ids)]
+        k_test_df = self.df[self.df[user_column].isin(k_test_ids)]
+        k_train_games_df, k_test_games_df = self.user_games_split(k_test_df, game_split_train=game_split_train)
+        final_k_train_df = k_train_df.append(k_train_games_df)
+        return (final_k_train_df, k_test_games_df)
+
     def get_k_folds(self, k, user_column='uid', game_split_train=.5):
         unique_users = self._get_unique_users(self.df)
         len_over_k = int((len(unique_users) + 1) / k)
         user_divisions = []
-        # divide users into k groups with equal number of users
+        # divide users into k groups with equal number of users (not equal rows)
         for i in range(0, k):
             user_subset = unique_users[i * len_over_k : (i + 1) * len_over_k]
             user_divisions.append(user_subset)
         # create train/test splits for each group
         finals = []
-        for i in range(0, len(user_divisions)):
-            k_test_ids = user_divisions[i]
-            k_train = user_divisions[0:i] + user_divisions[i+1:]
-            # flatten 2d -> 1d
-            k_train_ids = [item for sublist in k_train for item in sublist]
-            k_train_df = self.df[self.df[user_column].isin(k_train_ids)]
-            k_test_df = self.df[self.df[user_column].isin(k_test_ids)]
-            k_train_games_df, k_test_games_df = self.user_games_split(k_test_df, game_split_train=game_split_train)
-            final_k_train_df = k_train_df.append(k_train_games_df)
-            finals.append((final_k_train_df, k_test_games_df))
+        for k in range(0, len(user_divisions)):
+            finals.append(self._kth_train_test(
+                user_divisions,
+                k,
+                user_column,
+                game_split_train
+            ))
         return finals
+
 
 class SparkTrainTest(object):
     '''
