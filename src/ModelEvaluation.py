@@ -48,6 +48,12 @@ def spark_ndcg_at_k(
         .map(lambda kv: sorted(kv[1], key=lambda x: x[1], reverse=True)) \
         .map(lambda v: ndcg_at_k(np.array(v)[:, 0], k)) \
         .sum()
+
+    # more efficient? dont allocate object for each record
+    # rdd.aggregateByKey(zero)(
+    # (arr, v) => arr += v,
+    # (arr1, arr2) => arr1 + arr2)
+
     average_ndcg = ndcg / prediction_count
     return (ndcg, average_ndcg)
 

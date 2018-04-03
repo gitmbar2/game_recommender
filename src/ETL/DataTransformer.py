@@ -44,6 +44,7 @@ for user in users_to_query:
     for game in games:
         if game['playtime_forever'] is not 0:
             should_add = True
+            break
     if should_add:
         print('FOUND {} GAMES FOR USER'.format(len(games)))
         db.insert_item(games)
@@ -58,10 +59,10 @@ print('total time: {}'.format(time.time() - start_time))
 
 # to dump as line delimited json from command line:
 '''
-mongo localhost/steam --eval "db.game_plays.find(
-  {}, {
-    '_id': 0
-  }).forEach(function(x){
-    printjsononeline(x);
+mongo localhost/steam --eval "db.game_plays.find( \
+  {}, { \
+    '_id': 0 \
+  }).forEach(function(x){ \
+    printjsononeline(x); \
   })" | tail -n +4 >> filename
 '''
