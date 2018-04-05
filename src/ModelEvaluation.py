@@ -34,28 +34,29 @@ def ndcg_at_k(scores, k):
     return dcg_at_k(scores, k) / dcg_max
 
 def spark_ndcg_at_k(
-    predictions_rdd,
+    rdd,
     k,
     label_row='min_max',
     prediction_row='prediction'
 ):
-    # use actual values for gain
-    prediction_count = predictions_rdd.count()
-
-    sampled = predictions_rdd.sample(False, 1, 1)
     ndcg = rdd.map(lambda row: (row[id_col], [(row[label_col], row[prediction_col])])) \
         .reduceByKey(lambda all_data, val: all_data + val) \
         .map(lambda kv: sorted(kv[1], key=lambda x: x[1], reverse=True)) \
         .map(lambda v: ndcg_at_k(np.array(v)[:, 0], k)) \
         .sum()
+    return ndcg
 
-    # more efficient? dont allocate object for each record
-    # rdd.aggregateByKey(zero)(
-    # (arr, v) => arr += v,
-    # (arr1, arr2) => arr1 + arr2)
-
-    average_ndcg = ndcg / prediction_count
-    return (ndcg, average_ndcg)
+# may be more efficient because of object allocation
+def spark_ndcg_at_k_agg(rdd, top_n=5, label_col='playtime_min_max', prediction_col='prediction', id_col='uid'):
+    rdd_idcg = rdd \
+        .map(lambda row: (row[id_col], row)) \
+        .aggregateByKey([], \
+            lambda acc, v: acc + [(v[label_col], v[prediction_col])], \
+            lambda v1, v2: v1 + v2) \
+        .map(lambda kv: sorted(kv[1], key=lambda x: x[1], reverse=True)) \
+        .map(lambda v: idcg_at_k(np.array(v)[:, 0], top_n)) \
+        .sum()
+    return rdd_idcg
 
 # Verify RMSE with rdd math
 def spark_rmse(predictions, label_column='playtime_min_max'):

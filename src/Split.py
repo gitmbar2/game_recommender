@@ -69,9 +69,12 @@ class PandasTrainTest(object):
 
     def _kth_train_test(self, user_divisions, k, user_column, game_split_train):
         k_test_ids = user_divisions[k]
-        k_train = user_divisions[0:k] + user_divisions[k+1:]
-        # flatten 2d -> 1d
-        k_train_ids = [item for sublist in k_train for item in sublist]
+        k_train_ids = []
+        # more efficient than map and flatten
+        for i in range(len(user_divisions)):
+            if i is not k:
+                k_train_ids += user_divisions[i]
+        # maybe, for row in df, if in k_train append to k_train else append to test
         k_train_df = self.df[self.df[user_column].isin(k_train_ids)]
         k_test_df = self.df[self.df[user_column].isin(k_test_ids)]
         k_train_games_df, k_test_games_df = self.user_games_split(k_test_df, game_split_train=game_split_train)
@@ -79,13 +82,13 @@ class PandasTrainTest(object):
         return (final_k_train_df, k_test_games_df)
 
     def get_k_folds(self, k, user_column='uid', game_split_train=.5):
-        unique_users = self._get_unique_users(self.df)
+        """
+            game_split_train is the percent of games in the training set for test users
+        """
+        unique_users = self._get_unique_users(self.df).tolist()
         len_over_k = int((len(unique_users) + 1) / k)
-        user_divisions = []
         # divide users into k groups with equal number of users (not equal rows)
-        for i in range(0, k):
-            user_subset = unique_users[i * len_over_k : (i + 1) * len_over_k]
-            user_divisions.append(user_subset)
+        user_divisions = [unique_users[i * len_over_k : (i + 1) * len_over_k] for i in range(0, k)]
         # create train/test splits for each group
         finals = []
         for k in range(0, len(user_divisions)):

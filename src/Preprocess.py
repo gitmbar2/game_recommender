@@ -35,9 +35,9 @@ class PandasALSPreprocessor(object):
             pandas DataFrame.
         '''
         aggs = {'playtime_mean': np.mean, 'playtime_min': np.min, 'playtime_max': np.max, 'game_counts': 'count'}
-        grouped_means = df.groupby('game_name').agg({'playtime': aggs})
+        grouped_means = df.groupby('game_uid').agg({'playtime': aggs})
         grouped_means.columns = [col[1] for col in grouped_means.columns]
-        joined = df.join(grouped_means, on='game_name')
+        joined = df.join(grouped_means, on='game_uid')
         joined['playtime_min_max'] = joined.apply(lambda x: (self._calculate_min_max(x) * max_rank), axis=1)
         return joined
 
